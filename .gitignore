@@ -1,0 +1,14 @@
+# editor
+.vscode
+
+# node
+node_modules
+npm-debug.log
+
+# build
+dist
+
+# Otros
+.DS_Store
+coverage
+.nyc_output

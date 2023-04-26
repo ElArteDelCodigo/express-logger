@@ -8,5 +8,5 @@ npm login
 npm version patch
 
 # Publica el paquete en npm
-npm publish
+npm publish --access public
 ```

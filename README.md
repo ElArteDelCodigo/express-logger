@@ -14,14 +14,14 @@ Librería para generar logs para express con pino
 ## Instalación
 
 ```bash
-npm install @ElArteDelCodigo/express-logger
+npm install @elartedelcodigo/express-logger
 ```
 
 ## Ejemplo
 
 ```ts
 import express, { NextFunction, Request, Response } from 'express'
-import { initialize, printLogo, printInfo, getInstance } from 'express-logger'
+import { initialize, printLogo, printInfo, getInstance } from '@elartedelcodigo/express-logger'
 
 const app = express()
 initialize(app, {

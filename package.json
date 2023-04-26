@@ -1,5 +1,5 @@
 {
-  "name": "express-logger",
+  "name": "@elartedelcodigo/express-logger",
   "version": "1.0.0",
   "description": "Librería para generar logs para express con pino",
   "main": "dist/index.js",

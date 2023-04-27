@@ -1,0 +1,19 @@
+export type LoggerParams = {
+  appName: string
+  logPath: string
+  logLevel: string
+  logSize: string
+  logInterval: string
+  logCompress: string
+  logHide: string
+  subFolderName: string
+}
+
+export type ExpressLoggerParams = Partial<LoggerParams>
+
+export type AppInfo = {
+  name: string
+  version: string
+  env: string
+  port: string
+}

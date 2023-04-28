@@ -18,6 +18,9 @@ export default async function testSuit() {
   await peticion('/api/success/debug')
   await peticion('/api/success/trace')
 
+  await peticion('/api/not-found/123')
+  await peticion('/api/success/info')
+
   if (server) {
     await detenerServer(server)
   }

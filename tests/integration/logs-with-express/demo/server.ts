@@ -21,6 +21,12 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 app.use('/api', router)
 
 // eslint-disable-next-line
+app.use('*', (req: Request, res: Response, next: NextFunction) => {
+  logger.warn('no existe la ruta', req.method, req.originalUrl)
+  res.status(404).send('Not found')
+})
+
+// eslint-disable-next-line
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   logger.error(err)
   res.status(500).send('error')

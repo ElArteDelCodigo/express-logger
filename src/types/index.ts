@@ -7,6 +7,7 @@ export type LoggerParams = {
   logCompress: string
   logHide: string
   subFolderName: string
+  projectPath: string
 }
 
 export type ExpressLoggerParams = Partial<LoggerParams>

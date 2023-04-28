@@ -14,6 +14,7 @@ export class ExpressLogger {
       logCompress: options?.logCompress || 'false',
       logHide: options?.logHide || '',
       subFolderName: options?.subFolderName || '',
+      projectPath: options?.projectPath || process.cwd(),
     })
     app.use(expressMiddleware())
     app.use(LoggerService.getPinoInstance())

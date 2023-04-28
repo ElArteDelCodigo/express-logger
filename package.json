@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "build": "rm -rf dist && tsc --project tsconfig.json",
-    "test": "node dist/index.js",
+    "test": "ts-node tests/integration/index.spec.ts",
     "lint": "eslint src",
     "format": "prettier --write src",
     "prepublishOnly": "npm run build"

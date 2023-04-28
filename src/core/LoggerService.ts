@@ -12,6 +12,7 @@ import { stdoutWrite } from '../tools/util'
 import * as rTracer from 'cls-rtracer'
 
 export class LoggerService {
+  private static opt: LoggerParams | null = null
   private static instance: LoggerService | null = null
   private static pinoInstance: HttpLogger | null = null
   private static redact: fastRedact.redactFn
@@ -22,6 +23,16 @@ export class LoggerService {
     const stream: pino.DestinationStream = LoggerConfig.getStream(opt)
     LoggerService.pinoInstance = pinoHttp(opts, stream)
     LoggerService.redact = fastRedact(opts.redact as unknown)
+    LoggerService.opt = opt
+
+    stdoutWrite(`\n${COLOR.LIGHT_GREY} |----- Express Logger ------ ...${COLOR.RESET}\n`)
+    Object.keys(opt).forEach((property) => {
+      stdoutWrite(
+        ` ${COLOR.LIGHT_GREY}|${COLOR.RESET} ${String(property).padEnd(14)}` +
+          `${COLOR.LIGHT_GREY}|${COLOR.RESET} ${COLOR.CYAN}${opt[property]}${COLOR.RESET}\n`,
+      )
+    })
+    stdoutWrite(`${COLOR.LIGHT_GREY} |--------------------------- ...${COLOR.RESET}\n`)
   }
 
   static getInstance() {
@@ -39,12 +50,13 @@ export class LoggerService {
 
   private getContext(): string {
     try {
-      const projectPath = process.cwd()
-      const method = String(new Error().stack)
+      const projectPath = LoggerService.opt.projectPath
+      const originalStack = String(new Error().stack)
+      const method = originalStack
         .split('\n')
         .slice(4)
         .map((line) => line.replace(new RegExp(projectPath, 'g'), '...'))
-        .filter((line) => line.includes('.../src'))
+        .filter((line) => line.includes('.../'))
         .map((line) => line.split('/').pop()?.slice(0, -1))
         .shift()
       return method || '-'

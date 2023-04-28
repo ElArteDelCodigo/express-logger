@@ -1,8 +1,6 @@
 import { COLOR } from '../constants'
 import { LoggerService } from '../core'
-import { stdoutWrite } from './util'
-
-const logger = LoggerService.getInstance()
+import { stdoutWrite } from '../tools'
 
 const DEFAULT_LOGO = `
   _____                              
@@ -16,6 +14,8 @@ const DEFAULT_LOGO = `
   `
 
 export function printLogo(logo = DEFAULT_LOGO) {
+  const logger = LoggerService.getInstance()
+
   logger.trace('')
   const toPrint = logo.replace(/\n/g, `\n${COLOR.LIGHT_GREY}`)
   stdoutWrite(`${COLOR.LIGHT_GREY}${toPrint}${COLOR.RESET}\n`)

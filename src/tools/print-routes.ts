@@ -6,7 +6,7 @@ import express from 'express'
 
 const logger = LoggerService.getInstance()
 
-export async function printRoutes(app: express.Express) {
+export function printRoutes(app: express.Express) {
   _printRoutes(app)
 }
 

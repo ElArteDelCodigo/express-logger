@@ -56,14 +56,13 @@ Archivo `server.ts`
 ```ts
 import express, { NextFunction, Request, Response } from 'express'
 import { ExpressLogger, printLogo, printInfo, printRoutes } from '@elartedelcodigo/express-logger'
-import path from 'path'
 import router from './src/routes/application'
 
 export const app = express()
 
 ExpressLogger.initialize(app, {
   appName: 'test-backend',
-  logPath: path.resolve(__dirname, './logs'),
+  logPath: '/tmp/log',
 })
 
 const logger = ExpressLogger.getInstance()
@@ -115,26 +114,22 @@ Resultado 3:
 Se habrán creado los siguientes archivos: `error.log`, `info.log` y `warn.log`.
 
 ```txt
-app
-  ├─ logs
-  │     └─ test-backend
-  │           ├─ error.log
-  │           ├─ info.log
-  │           └─ warn.log
-  ├─ src
-  │     └─ routes
-  │           └─ application.ts
-  └─ server.ts
+/tmp
+  ├─ log
+        └─ test-backend
+              ├─ error.log
+              ├─ info.log
+              └─ warn.log
 ```
 
 Contenido del archivo: `info.log`
 
 ```json
-{"level":30,"time":"2023-04-28T00:00:19.333Z","pid":18997,"hostname":"server","name":"test-backend","context":"print-routes.ts:14:1","msg":"Cargando aplicación..."}
-{"level":30,"time":"2023-04-28T00:00:19.338Z","pid":18997,"hostname":"server","name":"test-backend","context":"print-info.ts:17:1","msg":"test-backend v1.0.0"}
-{"level":30,"time":"2023-04-28T00:00:21.368Z","pid":18997,"hostname":"server","name":"test-backend","reqId":"ab168a50-e557-11ed-ba91-5504bd57ef63","context":"server.ts:22:1","msg":"ok"}
-{"level":30,"time":"2023-04-28T00:00:21.372Z","pid":18997,"hostname":"server","name":"test-backend","request":{"id":"ab168a50-e557-11ed-ba91-5504bd57ef63","method":"GET","url":"/"},"response":{"statusCode":200},"response time [ms]":6,"msg":"Petición concluida - 200"}
-{"level":30,"time":"2023-04-28T00:00:22.387Z","pid":18997,"hostname":"server","name":"test-backend","reqId":"abb1dff0-e557-11ed-ba91-5504bd57ef63","context":"application.ts:9:3","msg":"Mensaje de tipo info"}
+{"level":30,"time":"2023-04-28T00:41:33.936Z","pid":21195,"hostname":"server","name":"test-backend","context":"print-routes.ts:14:1","msg":"Cargando aplicación..."}
+{"level":30,"time":"2023-04-28T00:41:33.941Z","pid":21195,"hostname":"server","name":"test-backend","context":"print-info.ts:17:1","msg":"test-backend v1.0.0"}
+{"level":30,"time":"2023-04-28T00:41:35.974Z","pid":21195,"hostname":"server","name":"test-backend","reqId":"6e117330-e55d-11ed-ae62-f1c38d6314d3","context":"server.ts:21:1","msg":"ok"}
+{"level":30,"time":"2023-04-28T00:41:35.977Z","pid":21195,"hostname":"server","name":"test-backend","request":{"id":"6e117330-e55d-11ed-ae62-f1c38d6314d3","method":"GET","url":"/"},"response":{"statusCode":200},"response time [ms]":5,"msg":"Petición concluida - 200"}
+{"level":30,"time":"2023-04-28T00:41:36.988Z","pid":21195,"hostname":"server","name":"test-backend","reqId":"6eac53a0-e55d-11ed-ae62-f1c38d6314d3","context":"application.ts:9:3","msg":"Mensaje de tipo info"}
 ...
 ```
 

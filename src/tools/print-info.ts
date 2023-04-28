@@ -6,7 +6,7 @@ import { AppInfo } from '../types'
 
 const logger = LoggerService.getInstance()
 
-export async function printInfo(appInfo: AppInfo) {
+export function printInfo(appInfo: AppInfo) {
   const appName = appInfo.name
   const appVersion = appInfo.version
   const nodeEnv = appInfo.env

@@ -15,7 +15,7 @@ const DEFAULT_LOGO = `
      Express Backend
   `
 
-export const printLogo = async (logo = DEFAULT_LOGO) => {
+export function printLogo(logo = DEFAULT_LOGO) {
   logger.trace('')
   const toPrint = logo.replace(/\n/g, `\n${COLOR.LIGHT_GREY}`)
   stdoutWrite(`${COLOR.LIGHT_GREY}${toPrint}${COLOR.RESET}\n`)

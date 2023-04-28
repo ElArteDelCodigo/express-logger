@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { ExpressLogger } from '../../../../../src'
+import { ExpressLogger } from '../../../../../../src'
 
 const router = express.Router()
 const logger = ExpressLogger.getInstance()

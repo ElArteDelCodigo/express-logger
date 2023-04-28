@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { ExpressLogger, printLogo, printInfo, printRoutes } from '../../../src'
+import { ExpressLogger, printLogo, printInfo, printRoutes } from '../../../../src'
 import path from 'path'
 import router from './src/routes/application'
 

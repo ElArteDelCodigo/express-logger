@@ -18,7 +18,7 @@ export class LoggerService {
   private static redact: fastRedact.redactFn | null = null
 
   static initializeWithParams(options: Partial<LoggerParams>): void {
-    const opt = {
+    const opt: LoggerParams = {
       appName: options?.appName || 'app',
       logPath: options?.logPath || '',
       logLevel: options?.logLevel || 'info',

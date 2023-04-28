@@ -2,13 +2,13 @@ import listEndpoints from 'express-list-endpoints'
 import { COLOR } from '../constants'
 import { LoggerService } from '../core'
 import { stdoutWrite } from '../tools'
-import express from 'express'
+import { Express } from 'express'
 
-export function printRoutes(app: express.Express) {
+export function printRoutes(app: Express) {
   _printRoutes(app)
 }
 
-async function _printRoutes(mainRouter: express.Express) {
+async function _printRoutes(mainRouter: Express) {
   const logger = LoggerService.getInstance()
 
   logger.info('Cargando aplicación...')

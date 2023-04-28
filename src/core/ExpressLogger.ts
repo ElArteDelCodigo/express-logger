@@ -1,10 +1,10 @@
 import { LoggerService } from './LoggerService'
 import { expressMiddleware } from 'cls-rtracer'
 import { LoggerParams } from '../types'
-import express from 'express'
+import { Express } from 'express'
 
 export class ExpressLogger {
-  static initialize(app: express.Express, options?: Partial<LoggerParams>) {
+  static initialize(app: Express, options?: Partial<LoggerParams>) {
     LoggerService.initializeWithParams(options)
     app.use(expressMiddleware())
     app.use(LoggerService.getPinoInstance())

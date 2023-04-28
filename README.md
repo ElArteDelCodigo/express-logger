@@ -19,11 +19,43 @@ npm install @elartedelcodigo/express-logger
 
 ## Ejemplo
 
+```txt
+app
+  ├─ src
+  │     └─ routes
+  │           └─ application.ts
+  └─ server.ts
+```
+
+Archivo `src/routes/application.ts`
+
+```ts
+import express, { NextFunction, Request, Response } from 'express'
+import { ExpressLogger } from '@elartedelcodigo/express-logger'
+
+const router = express.Router()
+const logger = ExpressLogger.getInstance()
+
+// eslint-disable-next-line
+router.get('/success/:logLevel', (req: Request, res: Response, next: NextFunction) => {
+  logger[req.params.logLevel](`Mensaje de tipo ${req.params.logLevel}`)
+  res.status(200).send('ok')
+})
+
+// eslint-disable-next-line
+router.get('/error', (req: Request, res: Response, next: NextFunction) => {
+  logger.error('[local] error from src/routes/application.ts')
+  throw new Error('some error')
+})
+
+export default router
+```
+
 Archivo `server.ts`
 
 ```ts
 import express, { NextFunction, Request, Response } from 'express'
-import { ExpressLogger, printLogo, printInfo, printRoutes } from '../../../src'
+import { ExpressLogger, printLogo, printInfo, printRoutes } from '@elartedelcodigo/express-logger'
 import path from 'path'
 import router from './src/routes/application'
 
@@ -65,37 +97,9 @@ printInfo({
   port: '3333',
 })
 
-if (require.main === module) {
-  app.listen(3333, () => {
-    process.stdout.write(`App running on port ${3333}\n`)
-  })
-}
-
-export default app
-```
-
-Archivo `src/routes/application.ts`
-
-```ts
-import express, { NextFunction, Request, Response } from 'express'
-import { ExpressLogger } from '../../../../../src'
-
-const router = express.Router()
-const logger = ExpressLogger.getInstance()
-
-// eslint-disable-next-line
-router.get('/success/:logLevel', (req: Request, res: Response, next: NextFunction) => {
-  logger[req.params.logLevel](`Mensaje de tipo ${req.params.logLevel}`)
-  res.status(200).send('ok')
+app.listen(3333, () => {
+  process.stdout.write(`App running on port ${3333}\n`)
 })
-
-// eslint-disable-next-line
-router.get('/error', (req: Request, res: Response, next: NextFunction) => {
-  logger.error('[local] error from src/routes/application.ts')
-  throw new Error('some error')
-})
-
-export default router
 ```
 
 Resultado 1: Al ejecutar la aplicación

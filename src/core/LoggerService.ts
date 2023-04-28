@@ -1,23 +1,38 @@
 import { AxiosError } from 'axios'
 import dayjs from 'dayjs'
-import pinoHttp, { HttpLogger } from 'pino-http'
+import { pino } from 'pino'
+import pinoHttp, { HttpLogger, Options } from 'pino-http'
 import { inspect } from 'util'
-import { COLOR, LOG_COLOR, LOG_LEVEL } from './constants'
+import { COLOR, LOG_COLOR, LOG_LEVEL } from '../constants'
 import fastRedact from 'fast-redact'
-import { LoggerConfig, LoggerParams } from './logger.config'
+import { LoggerConfig } from './LoggerConfig'
+import { LoggerParams } from '../types'
 import { toJSON } from 'flatted'
-import { stdoutWrite } from './tools/util'
+import { stdoutWrite } from '../tools/util'
 import * as rTracer from 'cls-rtracer'
 
 export class LoggerService {
+  private static opt: LoggerParams | null = null
   private static instance: LoggerService | null = null
   private static pinoInstance: HttpLogger | null = null
   private static redact: fastRedact.redactFn
 
   static initializeWithParams(opt: LoggerParams) {
     if (LoggerService.pinoInstance) return
-    LoggerService.pinoInstance = pinoHttp(LoggerConfig.getPinoHttpConfig(opt), LoggerConfig.getStream(opt))
-    LoggerService.redact = fastRedact(LoggerConfig.redactOptions(opt))
+    const opts: Options = LoggerConfig.getPinoHttpConfig(opt)
+    const stream: pino.DestinationStream = LoggerConfig.getStream(opt)
+    LoggerService.pinoInstance = pinoHttp(opts, stream)
+    LoggerService.redact = fastRedact(opts.redact as unknown)
+    LoggerService.opt = opt
+
+    stdoutWrite(`\n${COLOR.LIGHT_GREY} |----- Express Logger ------ ...${COLOR.RESET}\n`)
+    Object.keys(opt).forEach((property) => {
+      stdoutWrite(
+        ` ${COLOR.LIGHT_GREY}|${COLOR.RESET} ${String(property).padEnd(14)}` +
+          `${COLOR.LIGHT_GREY}|${COLOR.RESET} ${COLOR.CYAN}${opt[property]}${COLOR.RESET}\n`,
+      )
+    })
+    stdoutWrite(`${COLOR.LIGHT_GREY} |--------------------------- ...${COLOR.RESET}\n`)
   }
 
   static getInstance() {
@@ -33,36 +48,21 @@ export class LoggerService {
     return LoggerService.pinoInstance
   }
 
-  getContext(): string {
+  private getContext(): string {
     try {
-      const projectPath = process.cwd()
-      const method = String(new Error().stack)
+      const projectPath = LoggerService.opt.projectPath
+      const originalStack = String(new Error().stack)
+      const method = originalStack
         .split('\n')
         .slice(4)
         .map((line) => line.replace(new RegExp(projectPath, 'g'), '...'))
-        .filter((line) => line.includes('.../src'))
+        .filter((line) => line.includes('.../'))
         .map((line) => line.split('/').pop()?.slice(0, -1))
         .shift()
       return method || '-'
     } catch (e) {
       return '-'
     }
-  }
-
-  /**
-   * @deprecated Cambiado por el método info. Ej: this.loggger.info('message')
-   * @param optionalParams
-   */
-  log(...optionalParams: unknown[]) {
-    this.print(LOG_LEVEL.INFO, ...optionalParams)
-  }
-
-  /**
-   * @deprecated Cambiado por el método trace. Ej: this.loggger.trace('message')
-   * @param optionalParams
-   */
-  verbose(...optionalParams: unknown[]) {
-    this.print(LOG_LEVEL.TRACE, ...optionalParams)
   }
 
   error(...optionalParams: unknown[]) {
@@ -85,6 +85,7 @@ export class LoggerService {
     this.print(LOG_LEVEL.TRACE, ...optionalParams)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static cleanAxiosResponse(value: any, deep = 0) {
     try {
       // Para evitar recursividad infinita
@@ -109,7 +110,7 @@ export class LoggerService {
         return Object.keys(value).reduce((prev, curr) => {
           prev[curr] = LoggerService.cleanAxiosResponse(value[curr], deep + 1)
           return prev
-        }, {} as any)
+        }, {})
       }
       try {
         return toJSON(value)
@@ -119,6 +120,7 @@ export class LoggerService {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static isAxiosResponse(data: any) {
     return Boolean(
       typeof data === 'object' &&
@@ -136,7 +138,7 @@ export class LoggerService {
       const context = this.getContext()
 
       // CLEAN PARAMS
-      optionalParams = optionalParams.map((data: any) => LoggerService.cleanAxiosResponse(data))
+      optionalParams = optionalParams.map((data: unknown) => LoggerService.cleanAxiosResponse(data))
 
       if (LoggerConfig.logLevelSelected.includes(level)) {
         optionalParams.map((param) => {
@@ -167,13 +169,14 @@ export class LoggerService {
               ? JSON.parse(LoggerService.redact(JSON.parse(JSON.stringify(data))))
               : data
         } catch (err) {
-          //
+          // lo intentamos :)
         }
         const toPrint = typeof data === 'object' ? inspect(data, false, null, false) : String(data)
         stdoutWrite(`${color}${toPrint.replace(/\n/g, `\n${color}`)}\n`)
       })
       stdoutWrite(COLOR.RESET)
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e)
     }
   }

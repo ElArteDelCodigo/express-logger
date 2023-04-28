@@ -1,16 +1,10 @@
 import { COLOR } from '../constants'
 import ip from 'ip'
-import { LoggerService } from '../logger.service'
+import { LoggerService } from '../core'
 import { stdoutWrite } from './util'
+import { AppInfo } from '../types'
 
 const logger = LoggerService.getInstance()
-
-export type AppInfo = {
-  name: string
-  version: string
-  env: string
-  port: string
-}
 
 export async function printInfo(appInfo: AppInfo) {
   const appName = appInfo.name

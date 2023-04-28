@@ -1,12 +1,12 @@
 {
   "name": "@elartedelcodigo/express-logger",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Librería para generar logs para express con pino",
   "main": "dist/index.js",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
     "build": "rm -rf dist && tsc --project tsconfig.json",
-    "test": "node dist/index.js",
+    "test": "ts-node tests/integration/index.spec.ts",
     "lint": "eslint src",
     "format": "prettier --write src",
     "prepublishOnly": "npm run build"

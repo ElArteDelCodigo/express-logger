@@ -18,11 +18,11 @@ export enum COLOR {
 }
 
 export enum LOG_LEVEL {
-  ERROR = 'error',
-  WARN = 'warn',
-  INFO = 'info',
-  DEBUG = 'debug',
-  TRACE = 'trace',
+  ERROR = 'error', // 1 Mensajes de error
+  WARN = 'warn', // 2 Mensajes de advertencia
+  INFO = 'info', // 4 Mensajes informativos
+  DEBUG = 'debug', // 6 Mensajes para el depurador
+  TRACE = 'trace', // 7 Mensajes sin importancia
 }
 
 export const LOG_COLOR = {

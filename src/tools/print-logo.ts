@@ -1,5 +1,5 @@
 import { COLOR } from '../constants'
-import { LoggerService } from '../logger.service'
+import { LoggerService } from '../core'
 import { stdoutWrite } from './util'
 
 const logger = LoggerService.getInstance()

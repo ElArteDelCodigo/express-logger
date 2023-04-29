@@ -1,14 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express'
-import { ExpressLogger, printLogo, printInfo, printRoutes } from '../../../src'
-import path from 'path'
+import { ExpressLogger, printLogo, printInfo, printRoutes } from '../../../../src'
 import router from './src/routes/application'
 
 export const app = express()
-
-ExpressLogger.initialize(app, {
-  appName: 'test-backend',
-  logPath: path.resolve(__dirname, './logs'),
-})
 
 const logger = ExpressLogger.getInstance()
 
@@ -25,6 +19,12 @@ app.get('/', (req: Request, res: Response, next: NextFunction) => {
 
 // api routes
 app.use('/api', router)
+
+// eslint-disable-next-line
+app.use('*', (req: Request, res: Response, next: NextFunction) => {
+  logger.warn('no existe la ruta', req.method, req.originalUrl)
+  res.status(404).send('Not found')
+})
 
 // eslint-disable-next-line
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

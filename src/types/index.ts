@@ -10,8 +10,6 @@ export type LoggerParams = {
   projectPath: string
 }
 
-export type ExpressLoggerParams = Partial<LoggerParams>
-
 export type AppInfo = {
   name: string
   version: string

@@ -1,3 +1,5 @@
 export { printRoutes } from './print-routes'
 export { printLogo } from './print-logo'
 export { printInfo } from './print-info'
+export { printLoggerParams } from './print-logger-params'
+export { stdoutWrite } from './stdout-write'

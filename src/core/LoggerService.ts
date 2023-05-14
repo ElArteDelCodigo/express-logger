@@ -9,7 +9,7 @@ import { LoggerConfig } from './LoggerConfig'
 import { LoggerParams } from '../types'
 import * as rTracer from 'cls-rtracer'
 import { printLoggerParams, stdoutWrite } from '../tools'
-import { cleanAxiosResponse, getContext } from '../utilities'
+import { cleanParamValue, getContext } from '../utilities'
 
 export class LoggerService {
   private static opt: LoggerParams | null = null
@@ -82,7 +82,7 @@ export class LoggerService {
       const context = getContext()
 
       // CLEAN PARAMS
-      optionalParams = optionalParams.map((data: unknown) => cleanAxiosResponse(data))
+      optionalParams = optionalParams.map((data: unknown) => cleanParamValue(data))
 
       if (LoggerConfig.logLevelSelected.includes(level)) {
         optionalParams.map((param) => {

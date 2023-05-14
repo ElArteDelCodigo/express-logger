@@ -8,11 +8,10 @@ export function getErrorStack(originalErrorStack: string) {
       .split('\n')
       .map((line) => line.replace(new RegExp(projectPath, 'g'), '...'))
       .filter((line) => line.includes('.../'))
-      .map((line) => (line.trim().startsWith('at') ? line.trim().split(' ').slice(2).join(' -> ') : line.trim()))
-      .filter((line) => !!line)
+      .map((line) => line.substring(line.indexOf('.../'), line.length - 1))
       .join('\n')
       .trim()
-    return customErrorStack ? `Error stack:\n${customErrorStack}` : ''
+    return customErrorStack || ''
   } catch (err) {
     return originalErrorStack
   }

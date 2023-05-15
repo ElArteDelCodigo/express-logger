@@ -16,8 +16,8 @@ export function cleanParamValue(value: any, deep = 0) {
           data: value.data,
           status: value.status,
           statusText: value.statusText,
-          headers: value.headers,
-          config: value.config,
+          // headers: '__HEADERS__',
+          // config: '__CONFIG__',
         }
       }
       if (isAxiosRequest(value)) {
@@ -32,8 +32,8 @@ export function cleanParamValue(value: any, deep = 0) {
         return {
           code: value.code,
           config: value.config,
-          request: 'REQUEST',
-          response: 'RESPONSE',
+          // request: '__REQUEST__',
+          // response: '__RESPONSE__',
         }
       }
       return Object.keys(value).reduce((prev, curr) => {
@@ -42,6 +42,13 @@ export function cleanParamValue(value: any, deep = 0) {
       }, {})
     }
     // END
+
+    // Por seguridad se ofuscan los tokens
+    if (typeof value === 'string' && value.indexOf('Bearer') > -1) {
+      const regex = /(Bearer\s+)([^\s]+)/g
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      return value.replace(regex, (match, p1, p2) => `${p1}*****`)
+    }
 
     return value
   } catch (error) {
